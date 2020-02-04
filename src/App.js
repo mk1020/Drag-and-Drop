@@ -74,3 +74,7 @@ function App() {
 }
 
 export default App;
+
+//useful links:
+//https://www.pluralsight.com/guides/implement-drag-drop-react-component
+//https://habr.com/ru/post/187582/
