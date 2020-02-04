@@ -3,89 +3,71 @@ import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
-  let [state, setState] = useState({
-    tasks: [
-      {
-        id: "1",
-        taskName: "Read book",
-        type: "inProgress",
-        backgroundColor: "red"
-      },
-      {
-        id: "2",
-        taskName: "Pay bills",
-        type: "inProgress",
-        backgroundColor: "green"
-      },
-      {
-        id: "3",
-        taskName: "Go to the gym",
-        type: "Done",
-        backgroundColor: "blue"
-      },
-      {
-        id: "4",
-        taskName: "Play baseball",
-        type: "Done",
-        backgroundColor: "green"
-      }
-    ]
-  });
+  const tasks = [
+    {
+      id: "1",
+      taskName: "Test1"
+    },
+    {
+      id: "2",
+      taskName: "Test2"
+    },
+    {
+      id: "3",
+      taskName: "Test3"
+    },
+    {
+      id: "4",
+      taskName: "Test4"
+    }
+  ];
 
-  let onDragStart = (event, taskName) => {
-    event.dataTransfer.setData("taskName", taskName);
+  const [state, setState] = useState(tasks);
+
+  const onDragStart = (event, id) => {
+    //когда начинается перемещение, срабатывает onDragStart
+    event.dataTransfer.setData("id", id); //в память записывается id, c ключем "id", что-бы
+    //потом можно было по этому ключу вытащить сам id
   };
 
-  let onDragOver = event => {
+  const onDragOver = event => {
+    //просто видимо нужно для работы onDrop
     event.preventDefault();
   };
 
-  let onDrop = (event, cat) => {
-    let taskName = event.dataTransfer.getData("taskName");
+  const onDrop = (event, typeId, dropId) => {
+    //после наведения перемещаемого элемента(когда курсор мыши заходит за границу элемента, на который мы хотим переместить)
+    //на конечный элемент и отпускания кнопки мыши, срабатывает onDrop
+    const dragId = event.dataTransfer.getData(typeId); //вытаскиваем id из onDragStart по типу "id"
+    let tasks = [...state];
+    //находим index элемента массива, в котором есть перемещаемый элемент и конечный элемент
+    const indexDrag = state.findIndex(t => t.id === dragId);
+    const indexDrop = state.findIndex(t => t.id === dropId);
+    //меняем местами два элемента массива и обновляем state:
+    const elementDrop = { ...state[indexDrop] };
 
-    let tasks = state.tasks.filter(task => {
-      if (task.taskName == taskName) {
-        task.type = cat;
-      }
-      return task;
-    });
-    setState({ ...state, tasks });
+    tasks[indexDrop] = state[indexDrag];
+    tasks[indexDrag] = elementDrop;
+    setState(tasks);
   };
 
-  let tasks = {
-    inProgress: [],
-    Done: []
-  };
-  state.tasks.forEach(task => {
-    tasks[task.type].push(
-      <div
-        key={task.id}
-        onDragStart={event => onDragStart(event, task.taskName)}
-        draggable
-        className="draggable"
-      >
-        {task.taskName}
-      </div>
-    );
-  });
   return (
     <div className="App">
       <h2> To Do List Drag & Drop</h2>
-      
-      <div
-        className="inProgress"
-        onDragOver={event => onDragOver(event)}
-        onDrop={event => onDrop(event, "inProgress")}
-      >inProgress
-        {tasks.inProgress}
-      </div>
-      
-      <div
-        className="Done"
-        onDragOver={event => onDragOver(event)}
-        onDrop={event => onDrop(event, "Done")}
-      >Done
-        {tasks.Done}
+
+      <div className="box">
+        {state.map(task => (
+          <div
+            key={task.id}
+            onDragStart={event => onDragStart(event, task.id)}
+            onDragOver={event => onDragOver(event)}
+            onDrop={event => onDrop(event, "id", task.id)}
+            draggable
+            className="Items"
+          >
+            {task.taskName}
+          </div>
+        ))}
       </div>
     </div>
   );

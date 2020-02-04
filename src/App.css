@@ -4,29 +4,19 @@
   margin: 0 auto;
 }
 
-.Done {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  right: 0;
-  top: 10;
-  background-color: #e42323;
-  border-left: 2px dotted red;
-}
 
-.inProgress {
-  position: absolute;
-  width: 200px;
-  height: 200px;
+.box {
+  width: 500px;
+  height: 500px;
   left: 0;
   top: 10;
   background-color: rgb(76, 204, 64);
   border-right: 2px dotted red;
 }
 
-.draggable {
+.Items {
   width: 100px;
   height: 100px;
   background-color: yellow;
-  margin: 10px auto;
+  margin: 10px 200px;
 }
